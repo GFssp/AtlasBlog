@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Post
-from .forms import PostForm
+from .forms import PostForm, RawPostForm
 
 # This project uses Functions Based View
 def homepage_view(request, *args, **kwargs):
@@ -26,13 +26,13 @@ def post_detail_view(request):
     return render(request, "posts.html", context)
 
 def post_create_view(request):
-    form = PostForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-
-    obj = Post.objects.get(id=1)
+    my_form = RawPostForm()
+    if request.method == "POST":
+        my_form = RawPostForm(request.POST)
+        if my_form.is_valid():
+            Post.objects.create(**my_form.cleaned_data)
+    
     context = {
-        "form": form
+      "form": my_form
     }
-
     return render(request, "post_create.html", context)
