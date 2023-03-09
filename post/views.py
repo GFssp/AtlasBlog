@@ -42,9 +42,9 @@ def post_create_view(request):
     }
     return render(request, "post_create.html", context)
 
-def dynamic_lookup_view(request, my_id):
-    obj = Post.objects.get(id=my_id)
-    obj = get_object_or_404(Post, id=my_id)
+def dynamic_lookup_view(request, id):
+    obj = Post.objects.get(id=id)
+    obj = get_object_or_404(Post, id=id)
     context = {
         "object": obj
     }
